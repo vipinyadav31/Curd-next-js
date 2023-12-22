@@ -1,95 +1,99 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client"
+import styles from "./page.module.css";
+import { Button, Form, Input } from "antd";
+import Link from "next/link";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const [users , setUsers] = useState([])
+    const onFinish = async (values) => {
+        try {
+            const response = await axios.post('https://staging-api.zesthrm.com/api/v1/auth/login');
+            setUsers(response.data);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+    
+        console.log("Success:", users);   
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log("Failed:", errorInfo);
+    };
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+    return (
+        <main className= "main">
+          <div className={styles.main}>
+        {/* <h2 className="d-flex justify-content-center bg-black text-white p-2 mb-5 ">Login page</h2> */}
+            <Form
+               layout="vertical"
+                className=" U_formclass bg-white  rounded-4 mt-5"
+                name="basic"
+                labelCol={{
+                    span: 16,
+                }}
+                // wrapperCol={{
+                //     span: 16,
+                // }}
+                style={{
+                    maxWidth: 1000,
+                    width: 330,
+                }}
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+            >    
+                <p className="fs-5 ">Account Login</p>
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please input your email!",
+                            
+                        },
+                    ]}
+                >
+                    <Input  placeholder="Enter email" />
+                </Form.Item>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+                <Form.Item
+                    label="Password"
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please input your password!",
+                        },
+                    ]}
+                >
+                    <Input.Password placeholder="Enter Password" />
+                </Form.Item>    
+                <Form.Item
+                    wrapperCol={{
+                        // offset: 8,
+                        // span: 16,
+                    }}
+                >
+                    {/* <Button type="primary" style={{"backgroundColor"}} htmlType="submit"> */}
+                    <Button type="default"
+                    className="mt-3"
+                     htmlType="submit" 
+                     style={{ backgroundColor: 'black', color: 'white', width: '100%',  }}
+                     
+                     >
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+                        Login
+                    </Button>
+                </Form.Item>
+                <p>Not a member? <Link href="/signup">Signup Here. </Link></p>
+            </Form>
+            </div>
+        </main>
+    );
 }
