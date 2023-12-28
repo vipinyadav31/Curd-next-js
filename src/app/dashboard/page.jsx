@@ -1,54 +1,57 @@
 "use client";
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./../page.module.css";
-import { DesktopOutlined } from "@ant-design/icons";
-import { Layout, Menu, theme , Row, Table } from "antd";
+import { DesktopOutlined, UserOutlined } from "@ant-design/icons";
+import { Layout, Menu, theme, Row, Table } from "antd";
 import { Button } from "antd/es/radio";
 import Index from "./Index";
 const { Header, Content, Sider } = Layout;
-function getItem(label, key, icon, children) {
-    return {
-        key,
-        icon,
-        children,
-        label,
-    };
-}
-const items = [getItem("Users", "1", <DesktopOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-];
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+// function getItem(label, key, icon, children) {
+//     return {
+//         key,
+//         icon,
+//         children,
+//         label,
+//     };
+// }
+// const items = [getItem("Users", "1", <DesktopOutlined />),
+// getItem('Option 2', '2', <DesktopOutlined />, '/option2'), // Add the path '/option2' for example
+
+//   getItem('Option 2', '2', <DesktopOutlined />,null , '/users' 	),
+// ];
 const columns = [
     {
         title: "Name",
         dataIndex: "name",
         key: "name",
-        align: 'center',
-
+        align: "center",
     },
     {
         title: "Email",
         dataIndex: "email",
         key: "email",
-        align: 'center',
-
+        align: "center",
     },
     {
         title: "Phone",
         dataIndex: "phone",
-        key: "phone",
-        align: 'center',
-
+        key: "key",
+        align: "center",
     },
     {
         title: "Organization Name",
         dataIndex: "organizationName",
         key: "organizationName",
-        align: 'center',
-
+        align: "center",
     },
 ];
 const App = () => {
+    const router = useRouter();
+
     const [apiData, setApiData] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
     const [signUpCall, setSignUpCall] = useState(false);
@@ -94,11 +97,32 @@ const App = () => {
                     </h3>
                     <div className="demo-logo-vertical" />
                     <Menu
+                        onClick={(key) => {
+                            if (key === "users") {
+                                router.push(`/users`);
+                            }
+                        }}
                         theme="dark"
                         defaultSelectedKeys={["1"]}
                         mode="inline"
-                        items={items}
-                    />
+                        items={[
+                            {
+                                key: "1",
+                                icon: <DesktopOutlined />,
+                                label: "desktop",
+                            },
+                            // {
+                            //     key: "2",
+                            //     icon: <UserOutlined />,
+                            // label: <Link href="/users" > users</Link>,
+
+                            // },
+                        ]}
+                    >
+                        {/* <Menu.Item key="2">
+                         <Link to="/users"></Link>
+      </Menu.Item> */}
+                    </Menu>
                 </Sider>
                 <Layout>
                     <Header
@@ -112,11 +136,12 @@ const App = () => {
                             margin: "26px",
                         }}
                     >
-                        <Row justify="center"
-                         style={{
-                            display: "flex",
-                            justifyContent: "right"
-                         }}
+                        <Row
+                            justify="center"
+                            style={{
+                                display: "flex",
+                                justifyContent: "right",
+                            }}
                         >
                             <Button
                                 style={{
@@ -130,16 +155,7 @@ const App = () => {
                                 Add
                             </Button>
                         </Row>
-                        <Row
-                            justify="center"
-
-                            // style={{
-                            //     display: "flex",
-                            //     justifyContent: "center",
-                            //     alignContent: "center",
-                            //     alignItems: "center",
-                            // }}
-                        >
+                        <Row justify="center">
                             <Table
                                 style={{ width: "90%" }}
                                 pagination={false}
@@ -147,9 +163,10 @@ const App = () => {
                                 columns={columns}
                                 scroll={{ x: true }}
                                 bordered
-                                col
-                              />
+                                
+                            />
                         </Row>
+                        <Row></Row>
                     </Content>
                 </Layout>
                 <Index isShow={signUpCall} handleCancel={onClose} />

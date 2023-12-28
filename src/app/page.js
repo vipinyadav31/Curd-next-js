@@ -18,6 +18,7 @@ export default function Home() {
                 }
             );
             console.log(response);
+            console.log(response.data.token);
 
             message.success("Login successfully");
             router.push(`/dashboard`);
