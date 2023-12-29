@@ -1,8 +1,7 @@
 "use client";
 import styles from "./page.module.css";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input ,message} from "antd";
 import Link from "next/link";
-import { message } from "antd";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -17,7 +16,6 @@ export default function Home() {
                     password: values.password,
                 }
             );
-            console.log(response);
             localStorage.setItem("token", response.data.token);
             const isloggedIn = response.data.token;
             if (isloggedIn) {
@@ -28,16 +26,13 @@ export default function Home() {
             message.error(` Email is not registered with us. Try signup. `);
         }
     };
-    const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
-    };
-    console.log(localStorage.getItem("token"));
+    
     return (
         <main className={styles.body}>
             <div className={styles.main}>
                 <Form
                     layout="vertical"
-                    className=" U_formclass bg-white  rounded-4 mt-5"
+                    className=" forms bg-white  rounded-4 mt-5"
                     name="basic"
                     labelCol={{
                         span: 16,
@@ -50,7 +45,6 @@ export default function Home() {
                         remember: true,
                     }}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
                     <p className="fs-5 ">Account Login</p>
@@ -60,11 +54,11 @@ export default function Home() {
                         rules={[
                             {
                                 type: "email",
-                                message: "please enter valid email ",
+                                message: "Please enter valid email ",
                             },
                             {
                                 required: true,
-                                message: "Please input your email!",
+                                message: "Please enter your email",
                             },
                         ]}
                     >
@@ -77,7 +71,7 @@ export default function Home() {
                         rules={[
                             {
                                 required: true,
-                                message: "Please input your password!",
+                                message: "Please enter your password",
                             },
                         ]}
                     >

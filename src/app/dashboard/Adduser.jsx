@@ -1,48 +1,27 @@
-import React, { useEffect } from "react";
+"use client";
+import React from "react";
 import { Form, Input, Modal, message, Row, Col } from "antd";
 import axios from "axios";
 
-const Edites = ({ isShow, handleCancel, id }) => {
+const Adduser = ({isShow, handleCancel}) => {
     const [form] = Form.useForm();
-    const setFormFields = (userData) => {
-        form.setFieldsValue({
-            name: userData.name,
-            email: userData.email,
-            phone: userData.phone,
-        });
-    };
     const onFinish = async (values) => {
         try {
-            const response = await axios.put(
-                `https://65682d079927836bd9742fb2.mockapi.io/usersData/${id}`,
+            const response = await axios.post(
+                "https://65682d079927836bd9742fb2.mockapi.io/usersData",
                 values
             );
             handleCancel();
             form.resetFields();
-            message.success("User edited successfully");
+            message.success("User added successfully");
         } catch (error) {
             message.error(error);
         }
     };
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await axios.get(
-                    `https://65682d079927836bd9742fb2.mockapi.io/usersData/${id}`
-                );
-                setFormFields(response.data);
-            } catch (error) {
-                message.error(error);
-            }
-        };
-        if (isShow && id) {
-            fetchUserData();
-        }
-    });
     return (
         <div>
             <Modal
-                title="Edit user"
+                title="Add user"
                 open={isShow}
                 onOk={form.submit}
                 okText="Submit"
@@ -55,10 +34,13 @@ const Edites = ({ isShow, handleCancel, id }) => {
                     layout="vertical"
                     form={form}
                     name="basic"
+                    initialValues={{
+                        remember: true,
+                    }}
                     onFinish={onFinish}
                     autoComplete="off"
                 >
-                    <Row gutter={[10,10]}>
+                    <Row gutter={[10, 10]}>
                         <Col md={12}>
                             <Form.Item
                                 label="Username"
@@ -66,7 +48,7 @@ const Edites = ({ isShow, handleCancel, id }) => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Please enter your username",
+                                        message: "Please enter your username!",
                                     },
                                 ]}
                             >
@@ -80,8 +62,11 @@ const Edites = ({ isShow, handleCancel, id }) => {
                                 rules={[
                                     {
                                         required: true,
+                                        message: "Please enter your email",
+                                    },
+                                    {
                                         type: "email",
-                                        message: "Please enter a valid email",
+                                        message: " please enter valid email",
                                     },
                                 ]}
                             >
@@ -96,13 +81,13 @@ const Edites = ({ isShow, handleCancel, id }) => {
                                     {
                                         required: true,
                                         message:
-                                            "Please enter your phone number!",
+                                            "Please enter your phone number",
                                     },
                                 ]}
                             >
                                 <Input />
                             </Form.Item>
-                        </Col> 
+                        </Col>
                     </Row>
                 </Form>
             </Modal>
@@ -110,4 +95,4 @@ const Edites = ({ isShow, handleCancel, id }) => {
     );
 };
 
-export default Edites;
+export default Adduser;

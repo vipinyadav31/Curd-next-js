@@ -3,7 +3,6 @@ import Link from "next/link";
 import styles from "../page.module.css";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { message } from "antd";
 import axios from "axios";
 import {
     Steps,
@@ -15,6 +14,7 @@ import {
     Input,
     Row,
     Select,
+    message,
 } from "antd";
 
 const { Option } = Select;
@@ -25,15 +25,12 @@ const SignUp = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [orgDetails, setOrgDetails] = useState("");
     const router = useRouter();
-    console.log("currentStep", currentStep);
     const onFinish = async (values) => {
         try {
             if (currentStep === 0) {
                 setOrgDetails(values);
                 setCurrentStep(1);
-                console.log("currentStep === 0", currentStep);
             } else if (currentStep === 1) {
-                console.log("currentStep === 1", currentStep);
                 const payload = {
                     organisationDetails: {
                         name: orgDetails.name,
@@ -73,11 +70,8 @@ const SignUp = () => {
             message.error(
                 "An error occurred. Please try again or contact support."
             );
-            console.log(error);
         }
-        console.log(values);
     };
-
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
             <Select
@@ -91,7 +85,6 @@ const SignUp = () => {
             </Select>
         </Form.Item>
     );
-
     return (
         <div className={styles.signup}>
             <div className={styles.main}>
@@ -99,7 +92,7 @@ const SignUp = () => {
                     <Form
                         initialValues={{ prefixSelector: "91" }}
                         layout="vertical"
-                        className=" U_formclass bg-white  rounded-4 mt-5"
+                        className=" forms bg-white  rounded-4 mt-5"
                         form={form}
                         name="register"
                         onFinish={onFinish}
@@ -116,7 +109,7 @@ const SignUp = () => {
                             <Step title="Organization" />
                             <Step title="Personal Details" />
                         </Steps>
-                        <Row>
+                        <Row gutter={[10, 10]}>
                             <Col md={12}>
                                 <Form.Item
                                     name="name"
@@ -124,7 +117,7 @@ const SignUp = () => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please enter your name!",
+                                            message: "Please enter your name",
                                             whitespace: true,
                                         },
                                     ]}
@@ -140,12 +133,11 @@ const SignUp = () => {
                                         {
                                             type: "email",
                                             message:
-                                                " Please enter valid E-mail!",
+                                                " Please enter valid email",
                                         },
                                         {
                                             required: true,
-                                            message:
-                                                "Please enter your E-mail!",
+                                            message: "Please enter your email",
                                         },
                                     ]}
                                 >
@@ -160,7 +152,7 @@ const SignUp = () => {
                                         {
                                             required: true,
                                             message:
-                                                "Please enter your phone number!",
+                                                "Please enter your phone number",
                                         },
                                     ]}
                                 >
@@ -181,7 +173,7 @@ const SignUp = () => {
                                         {
                                             required: true,
                                             message:
-                                                "Please enter Industry type!",
+                                                "Please enter industry type",
                                         },
                                     ]}
                                 >
@@ -189,30 +181,12 @@ const SignUp = () => {
                                 </Form.Item>
                             </Col>
                             <Col>
-                                <Form.Item
-                                    name="PAN"
-                                    label="PAN number"
-                                    rules={[
-                                        {
-                                            message:
-                                                "Please enter PAN card number!",
-                                        },
-                                    ]}
-                                >
+                                <Form.Item name="PAN" label="PAN number">
                                     <Input placeholder="PAN" />
                                 </Form.Item>
                             </Col>
                             <Col md={12}>
-                                <Form.Item
-                                    name="GST"
-                                    label="GST number"
-                                    rules={[
-                                        {
-                                            message:
-                                                "Please Enter GST card number!",
-                                        },
-                                    ]}
-                                >
+                                <Form.Item name="GST" label="GST number">
                                     <Input placeholder="GST" />
                                 </Form.Item>
                             </Col>
@@ -220,11 +194,6 @@ const SignUp = () => {
                                 <Form.Item
                                     name="addresses"
                                     label=" Street address"
-                                    rules={[
-                                        {
-                                            message: "Please !",
-                                        },
-                                    ]}
                                 >
                                     <Input
                                         type="textarea"
@@ -233,46 +202,19 @@ const SignUp = () => {
                                 </Form.Item>
                             </Col>
                             <Col>
-                                <Form.Item
-                                    name="city"
-                                    label="City"
-                                    rules={[
-                                        {
-                                            message: "Please Enter  your city!",
-                                        },
-                                    ]}
-                                >
+                                <Form.Item name="city" label="City">
                                     <Input placeholder="city name " />
                                 </Form.Item>
                             </Col>
                             <Col>
-                                <Form.Item
-                                    name="state"
-                                    label="State"
-                                    rules={[
-                                        {
-                                            message:
-                                                "Please Enter your State name!",
-                                        },
-                                    ]}
-                                >
+                                <Form.Item name="state" label="State">
                                     <Input placeholder="state name" />
                                 </Form.Item>
                             </Col>
-
-                            <Form.Item
-                                name=" zipcode"
-                                label="Zipcode"
-                                rules={[
-                                    {
-                                        message: "Please Enter  your zipcode!",
-                                    },
-                                ]}
-                            >
+                            <Form.Item name=" zipcode" label="Zipcode">
                                 <Input placeholder="zipcode" />
                             </Form.Item>
                         </Row>
-
                         <Form.Item>
                             <Button
                                 type="default"
@@ -297,7 +239,7 @@ const SignUp = () => {
                 {currentStep === 1 && (
                     <Form
                         layout="vertical"
-                        className=" U_formclass bg-white  rounded-4 mt-5"
+                        className=" forms bg-white  rounded-4 mt-5"
                         form={form}
                         name="register"
                         onFinish={onFinish}
@@ -314,7 +256,7 @@ const SignUp = () => {
                             <Step title="Organization" />
                             <Step title="Personal Details" />
                         </Steps>
-                        <Row>
+                        <Row gutter={[10, 10]}>
                             <Col md={12}>
                                 <Form.Item
                                     name="pname"
@@ -338,11 +280,11 @@ const SignUp = () => {
                                         {
                                             type: "email",
                                             message:
-                                                "The enter is not valid E-mail",
+                                                "The enter email is not valid ",
                                         },
                                         {
                                             required: true,
-                                            message: "Please enter your E-mail",
+                                            message: "Please enter your email",
                                         },
                                     ]}
                                 >
@@ -389,11 +331,6 @@ const SignUp = () => {
                                 <Form.Item
                                     name="paddresses"
                                     label=" Street address"
-                                    rules={[
-                                        {
-                                            message: "Please !",
-                                        },
-                                    ]}
                                 >
                                     <Input
                                         type="textarea"
@@ -402,43 +339,16 @@ const SignUp = () => {
                                 </Form.Item>
                             </Col>
                             <Col>
-                                <Form.Item
-                                    name="pcity"
-                                    label="City"
-                                    rules={[
-                                        {
-                                            // required: true,
-                                            message: "Please Enter  your city",
-                                        },
-                                    ]}
-                                >
+                                <Form.Item name="pcity" label="City">
                                     <Input placeholder="city name " />
                                 </Form.Item>
                             </Col>
                             <Col>
-                                <Form.Item
-                                    name="pstate"
-                                    label="State"
-                                    rules={[
-                                        {
-                                            // required: true,
-                                            message:
-                                                "Please Enter your State name!",
-                                        },
-                                    ]}
-                                >
+                                <Form.Item name="pstate" label="State">
                                     <Input placeholder="state name" />
                                 </Form.Item>
                             </Col>
-                            <Form.Item
-                                name="pzipcode"
-                                label="Zipcode"
-                                rules={[
-                                    {
-                                        message: "Please Enter  your zipcode!",
-                                    },
-                                ]}
-                            >
+                            <Form.Item name="pzipcode" label="Zipcode">
                                 <Input placeholder="zipcode" />
                             </Form.Item>
                         </Row>
@@ -455,12 +365,10 @@ const SignUp = () => {
                                 <Form.Item>
                                     <Button
                                         type="default"
-                                        // className="mt-3"
                                         htmlType="submit"
                                         style={{
                                             backgroundColor: "black",
                                             color: "white",
-                                            // width: "%",
                                         }}
                                     >
                                         Complete Registration

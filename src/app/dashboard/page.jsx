@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./../page.module.css";
 import {
@@ -7,30 +7,34 @@ import {
     DesktopOutlined,
     EditOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, theme, Row, Table, Popconfirm, message } from "antd";
-import { Button } from "antd/es/radio";
-import Index from "./Index";
+import {
+    Layout,
+    Menu,
+    theme,
+    Row,
+    Table,
+    Popconfirm,
+    message,
+    Button,
+} from "antd";
+import Adduser from "./Adduser";
 import Edites from "./Edites";
-const { Header, Content, Sider } = Layout;
 import { useRouter } from "next/navigation";
 
+const { Header, Content, Sider } = Layout;
 const App = () => {
     const router = useRouter();
-    const deleteButtonRef = useRef(null);
-    console.log(deleteButtonRef);
     const [apiData, setApiData] = useState([]);
-    // console.log(apiData, "jjjj")
     const [collapsed, setCollapsed] = useState(false);
-    const [signUpCall, setSignUpCall] = useState(false);
+    const [addUser, setAddUser] = useState(false);
     const [editRequest, setEditRequest] = useState(false);
     const [editId, setEditId] = useState("");
-    const [geted, setGeted] = useState("");
+    const [gettingResponse, setGettingResponse] = useState("");
 
     const isloggedIn = localStorage.getItem("token");
     if (!isloggedIn) {
         router.push("/");
     }
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -39,24 +43,19 @@ const App = () => {
                 );
                 setApiData(response.data);
             } catch (error) {
-                console.log(error);
+                message.error(error);
             }
         };
         fetchData();
-    }, [signUpCall, geted, editRequest]);
+    }, [addUser, gettingResponse, editRequest]);
 
     const confirm = async (id) => {
-        console.log(id);
         const response = await axios.delete(
             `https://65682d079927836bd9742fb2.mockapi.io/usersData/${id}`
         );
-        setGeted(response);
+        setGettingResponse(response);
         message.success("user deleted successfully ");
     };
-    const cancel = (e) => {
-        console.log(e);
-    };
-
     const columns = [
         {
             title: "Name",
@@ -82,7 +81,7 @@ const App = () => {
             width: "15%",
             key: "id",
             render: (id) => (
-                <div>
+                <>
                     <Button
                         onClick={() => {
                             setEditRequest(true);
@@ -92,19 +91,15 @@ const App = () => {
                         <EditOutlined />
                     </Button>
                     <Popconfirm
-                        // ref={id}
-                        ref={deleteButtonRef}
                         title="Delete users"
                         description="Are you sure to delete this users?"
                         onConfirm={() => confirm(id)}
-                        onCancel={cancel}
                         okText="Yes"
                         cancelText="No"
                     >
                         <Button
-                            // ref={deleteButtonRef}
                             style={{
-                                margin: "10px 0px 0px 10px",
+                                marginLeft: "10px",
                             }}
                         >
                             <DeleteOutlined
@@ -114,19 +109,17 @@ const App = () => {
                             />
                         </Button>
                     </Popconfirm>
-                </div>
+                </>
             ),
         },
     ];
-
     const {
         token: { colorBgContainer },
     } = theme.useToken();
     const onClose = () => {
-        setSignUpCall(false);
+        setAddUser(false);
         setEditRequest(false);
     };
-
     return (
         <div className={styles.parent}>
             <Layout style={{ minHeight: "100%" }}>
@@ -176,9 +169,10 @@ const App = () => {
                                     backgroundColor: "black",
                                     color: "white",
                                     marginRight: "8vw",
+                                    marginBottom: "10px"
                                 }}
                                 type="primary"
-                                onClick={() => setSignUpCall(true)}
+                                onClick={() => setAddUser(true)}
                             >
                                 Add
                             </Button>
@@ -194,10 +188,9 @@ const App = () => {
                                 rowKey={(keys) => keys.id}
                             />
                         </Row>
-                        <Row></Row>
                     </Content>
                 </Layout>
-                <Index isShow={signUpCall} handleCancel={onClose} />
+                <Adduser isShow={addUser} handleCancel={onClose} />
                 <Edites
                     isShow={editRequest}
                     handleCancel={onClose}
